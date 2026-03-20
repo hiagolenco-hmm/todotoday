@@ -29,25 +29,26 @@
             overflow: hidden;
         }
 
-        /* Menu de Navegação Superior */
+        /* Menu Superior Estilizado */
         .main-nav {
             width: 100%;
             background: white;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            padding: 15px 0;
+            gap: 15px;
+            padding: 12px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             z-index: 100;
         }
 
         .nav-link {
-            padding: 8px 25px;
+            padding: 8px 20px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
             color: #888;
             border-radius: 20px;
             transition: 0.3s;
+            font-size: 15px;
         }
 
         .nav-link.active {
@@ -55,67 +56,71 @@
             color: white;
         }
 
+        /* Container Principal (Mantendo seu estilo original) */
         .container {
             width: 95%;
-            max-width: 800px;
+            max-width: 600px;
             background: white;
-            margin-top: 25px;
+            margin-top: 30px;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.08);
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            margin-bottom: 100px; /* Espaço para barra de progresso */
+            margin-bottom: 100px; 
             box-sizing: border-box;
             min-height: 0;
         }
 
-        /* Seções dos Apps */
         .app-section { display: none; flex-direction: column; flex-grow: 1; min-height: 0; }
         .app-section.active { display: flex; }
 
-        /* Estilos de Abas */
+        /* Estilo das Abas (Seu estilo original) */
         .tabs-header {
             display: flex;
             align-items: center;
             gap: 10px;
             border-bottom: 2px solid #eee;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             overflow-x: auto;
             padding-bottom: 5px;
             flex-shrink: 0;
         }
         .tabs-header::-webkit-scrollbar { display: none; }
-        .tab-wrapper { display: flex; align-items: center; }
-        .tab-btn { padding: 10px 15px; border: none; background: none; cursor: pointer; font-weight: 600; color: #888; white-space: nowrap; }
+        .tab-wrapper { display: flex; align-items: center; position: relative; }
+        .tab-btn { padding: 10px 15px; border: none; background: none; cursor: pointer; font-weight: 600; color: #888; white-space: nowrap; transition: 0.3s; }
         .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
-        .delete-btn { font-size: 12px; color: #ccc; cursor: pointer; margin-left: -5px; margin-right: 10px; }
+        .delete-tab { font-size: 12px; color: #ccc; cursor: pointer; margin-left: -5px; margin-right: 10px; transition: 0.2s; }
+        .delete-tab:hover { color: var(--danger); }
+        .add-tab-btn { background: #eee; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; flex-shrink: 0; }
 
-        /* Estilos Específicos: Tarefas */
+        /* Input e Lista de Tarefas */
         .input-group { display: flex; gap: 10px; margin-bottom: 20px; flex-shrink: 0; }
+        input[type="text"] { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .add-task-btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; }
+
         .task-list-container { overflow-y: auto; flex-grow: 1; }
-        .task-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f9f9f9; }
-        .task-text { flex: 1; cursor: pointer; padding: 5px; }
+        .task-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f9f9f9; position: relative; }
+        .task-item:hover { background: #fafafa; }
+        
+        .task-text { flex: 1; cursor: pointer; padding: 5px; border-radius: 4px; transition: 0.2s; }
+        .task-text:not(.completed):hover { background: #f0f7ff; }
+        .task-text:not(.completed):hover::after { content: " ✎"; color: var(--edit-color); font-size: 0.9em; }
+        
         .completed { text-decoration: line-through; color: #aaa; }
-        .delete-task { color: #ddd; cursor: pointer; margin-left: 10px; opacity: 0; }
+        .task-item input[type="checkbox"] { margin-right: 15px; transform: scale(1.3); cursor: pointer; }
+
+        .edit-input { flex: 1; padding: 8px; border: 1px solid var(--edit-color); border-radius: 4px; font-size: 16px; font-family: inherit; outline: none; }
+
+        .delete-task { color: #ddd; cursor: pointer; font-weight: bold; font-size: 14px; opacity: 0; transition: 0.2s; padding: 5px; }
         .task-item:hover .delete-task { opacity: 1; }
+        .delete-task:hover { color: var(--danger); }
 
-        /* Estilos Específicos: Notas */
-        textarea {
-            width: 100%;
-            height: 100%;
-            border: none;
-            outline: none;
-            font-size: 18px;
-            line-height: 1.6;
-            resize: none;
-            padding: 10px;
-            font-family: inherit;
-            box-sizing: border-box;
-        }
+        /* Notas */
+        textarea { width: 100%; height: 100%; border: none; outline: none; font-size: 18px; line-height: 1.6; resize: none; padding: 10px; font-family: inherit; box-sizing: border-box; background: transparent; }
 
-        /* Barra de Progresso */
+        /* Barra de Progresso Fixa */
         .progress-container {
             position: fixed;
             bottom: 0;
@@ -125,7 +130,10 @@
             box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
             display: flex;
             justify-content: center;
+            z-index: 10;
         }
+        .progress-bg { width: 85%; max-width: 500px; height: 25px; background: #eee; border-radius: 12px; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; background: var(--success); transition: 0.4s; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -137,30 +145,29 @@
 
 <div class="container">
     <section id="tasks-section" class="app-section active">
+        <h2 style="text-align: center; color: var(--primary); margin-top: 0;">Tarefas</h2>
         <div class="tabs-header" id="task-tabs"></div>
         <div class="input-group">
             <input type="text" id="taskInput" placeholder="O que precisa ser feito?">
-            <button class="add-task-btn" onclick="addTask()" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">Add</button>
+            <button class="add-task-btn" onclick="addTask()">Add</button>
         </div>
         <div class="task-list-container">
-            <ul id="taskList" style="list-style: none; padding: 0;"></ul>
+            <ul id="taskList" style="list-style: none; padding: 0; margin: 0;"></ul>
         </div>
     </section>
 
     <section id="notes-section" class="app-section">
+        <h2 style="text-align: center; color: var(--primary); margin-top: 0;">Notas</h2>
         <div class="tabs-header" id="note-tabs"></div>
         <textarea id="noteInput" placeholder="Comece a escrever..." oninput="autoSaveNote()"></textarea>
     </section>
 </div>
 
 <div class="progress-container" id="progress-area">
-    <div class="progress-bg" style="width: 85%; max-width: 500px; height: 25px; background: #eee; border-radius: 12px; overflow: hidden;">
-        <div id="progressBar" class="progress-bar" style="height: 100%; width: 0%; background: var(--success); transition: 0.4s; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: bold;">0%</div>
-    </div>
+    <div class="progress-bg"><div id="progressBar" class="progress-bar">0%</div></div>
 </div>
 
 <script>
-    // BANCO DE DATA ÚNICO
     let db = JSON.parse(localStorage.getItem('dashboard_db')) || {
         activeApp: 'tasks',
         tasks: { "Geral": [] },
@@ -169,59 +176,51 @@
         currentNoteTab: "Geral"
     };
 
-    function save() {
-        localStorage.setItem('dashboard_db', JSON.stringify(db));
-    }
+    function save() { localStorage.setItem('dashboard_db', JSON.stringify(db)); }
 
-    // ALTERNAR APPS
     function switchApp(app) {
         db.activeApp = app;
         document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        
         document.getElementById(`${app}-section`).classList.add('active');
         document.getElementById(`nav-${app}`).classList.add('active');
-        
         document.getElementById('progress-area').style.display = (app === 'tasks') ? 'flex' : 'none';
-        
-        save();
-        render();
+        save(); render();
     }
 
-    // LÓGICA TAREFAS
+    // Tarefas
     function addTask() {
         const input = document.getElementById('taskInput');
         if (!input.value.trim()) return;
+        if (!db.tasks[db.currentTaskTab]) db.tasks[db.currentTaskTab] = [];
         db.tasks[db.currentTaskTab].push({ text: input.value, done: false });
-        input.value = '';
-        save(); render();
+        input.value = ''; save(); render();
     }
 
-    function toggleTask(index) {
-        db.tasks[db.currentTaskTab][index].done = !db.tasks[db.currentTaskTab][index].done;
-        save(); render();
-    }
-
-    function editTask(index, span) {
+    function editTask(index, spanElement) {
         if (db.tasks[db.currentTaskTab][index].done) return;
+        const currentText = db.tasks[db.currentTaskTab][index].text;
         const input = document.createElement('input');
+        input.type = 'text';
         input.className = 'edit-input';
-        input.value = db.tasks[db.currentTaskTab][index].text;
-        input.onblur = () => {
-            if (input.value.trim()) db.tasks[db.currentTaskTab][index].text = input.value;
+        input.value = currentText;
+
+        const saveEdit = () => {
+            const newText = input.value.trim();
+            if (newText) db.tasks[db.currentTaskTab][index].text = newText;
             save(); render();
         };
-        input.onkeydown = e => e.key === 'Enter' && input.blur();
-        span.replaceWith(input);
+
+        input.onblur = saveEdit;
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') saveEdit();
+            if (e.key === 'Escape') render();
+        };
+        spanElement.replaceWith(input);
         input.focus();
     }
 
-    // LÓGICA NOTAS
-    function autoSaveNote() {
-        db.notes[db.currentNoteTab] = document.getElementById('noteInput').value;
-        save();
-    }
-
+    // Abas
     function createTab(type) {
         const name = prompt("Nome da nova aba:");
         if (name && name.trim()) {
@@ -231,53 +230,77 @@
         }
     }
 
+    function deleteTab(type, name, e) {
+        e.stopPropagation();
+        if (confirm(`Excluir aba "${name}"?`)) {
+            if (type === 'tasks') {
+                delete db.tasks[name];
+                db.currentTaskTab = Object.keys(db.tasks)[0] || (db.tasks["Geral"]=[], "Geral");
+            } else {
+                delete db.notes[name];
+                db.currentNoteTab = Object.keys(db.notes)[0] || (db.notes["Geral"]="", "Geral");
+            }
+            save(); render();
+        }
+    }
+
+    // Notas
+    function autoSaveNote() {
+        db.notes[db.currentNoteTab] = document.getElementById('noteInput').value;
+        save();
+    }
+
     function render() {
-        // Renderizar Abas de Tarefas
-        const taskTabs = document.getElementById('task-tabs');
-        taskTabs.innerHTML = '';
+        // Render Abas Tarefas
+        const tTabs = document.getElementById('task-tabs');
+        tTabs.innerHTML = '';
         Object.keys(db.tasks).forEach(tab => {
             const wrap = document.createElement('div'); wrap.className = 'tab-wrapper';
-            wrap.innerHTML = `<button class="tab-btn ${tab === db.currentTaskTab ? 'active' : ''}" onclick="db.currentTaskTab='${tab}'; render()">${tab}</button>`;
-            taskTabs.appendChild(wrap);
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${tab === db.currentTaskTab ? 'active' : ''}`;
+            btn.innerText = tab; btn.onclick = () => { db.currentTaskTab = tab; render(); };
+            const del = document.createElement('span'); del.className = 'delete-tab'; del.innerText = '✕';
+            del.onclick = (e) => deleteTab('tasks', tab, e);
+            wrap.append(btn, del); tTabs.appendChild(wrap);
         });
-        const addT = document.createElement('button'); addT.className='tab-btn'; addT.innerText='+'; addT.onclick=()=>createTab('tasks'); taskTabs.appendChild(addT);
+        const addT = document.createElement('button'); addT.className='add-tab-btn'; addT.innerText='+'; addT.onclick=()=>createTab('tasks'); tTabs.appendChild(addT);
 
-        // Renderizar Lista
+        // Render Lista Tarefas
         const list = document.getElementById('taskList');
         list.innerHTML = '';
-        const currentTasks = db.tasks[db.currentTaskTab] || [];
+        const tasks = db.tasks[db.currentTaskTab] || [];
         let done = 0;
-        currentTasks.forEach((t, i) => {
+        tasks.forEach((t, i) => {
             if (t.done) done++;
             const li = document.createElement('li'); li.className = 'task-item';
-            const cb = document.createElement('input'); cb.type='checkbox'; cb.checked=t.done; cb.onchange=()=>toggleTask(i);
+            const cb = document.createElement('input'); cb.type='checkbox'; cb.checked=t.done; cb.onchange=()=> { t.done = !t.done; save(); render(); };
             const span = document.createElement('span'); span.className=`task-text ${t.done?'completed':''}`; span.innerText=t.text;
             span.onclick = () => editTask(i, span);
-            const del = document.createElement('span'); del.className='delete-task'; del.innerText='✕'; del.onclick=()=>{db.tasks[db.currentTaskTab].splice(i,1); save(); render();};
+            const del = document.createElement('span'); del.className='delete-task'; del.innerText='✕'; del.onclick=()=>{tasks.splice(i,1); save(); render();};
             li.append(cb, span, del); list.appendChild(li);
         });
-
-        const pct = currentTasks.length ? Math.round((done/currentTasks.length)*100) : 0;
+        const pct = tasks.length ? Math.round((done/tasks.length)*100) : 0;
         document.getElementById('progressBar').style.width = pct+'%';
         document.getElementById('progressBar').innerText = pct+'%';
 
-        // Renderizar Abas de Notas
-        const noteTabs = document.getElementById('note-tabs');
-        noteTabs.innerHTML = '';
+        // Render Abas Notas
+        const nTabs = document.getElementById('note-tabs');
+        nTabs.innerHTML = '';
         Object.keys(db.notes).forEach(tab => {
             const wrap = document.createElement('div'); wrap.className = 'tab-wrapper';
-            wrap.innerHTML = `<button class="tab-btn ${tab === db.currentNoteTab ? 'active' : ''}" onclick="db.currentNoteTab='${tab}'; render()">${tab}</button>`;
-            noteTabs.appendChild(wrap);
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${tab === db.currentNoteTab ? 'active' : ''}`;
+            btn.innerText = tab; btn.onclick = () => { db.currentNoteTab = tab; render(); };
+            const del = document.createElement('span'); del.className = 'delete-tab'; del.innerText = '✕';
+            del.onclick = (e) => deleteTab('notes', tab, e);
+            wrap.append(btn, del); nTabs.appendChild(wrap);
         });
-        const addN = document.createElement('button'); addN.className='tab-btn'; addN.innerText='+'; addN.onclick=()=>createTab('notes'); noteTabs.appendChild(addN);
+        const addN = document.createElement('button'); addN.className='add-tab-btn'; addN.innerText='+'; addN.onclick=()=>createTab('notes'); nTabs.appendChild(addN);
         document.getElementById('noteInput').value = db.notes[db.currentNoteTab] || "";
     }
 
     document.getElementById('taskInput').addEventListener('keypress', e => e.key === 'Enter' && addTask());
-    
-    // Iniciar no app correto
     switchApp(db.activeApp);
 </script>
-
 </body>
 </html>
