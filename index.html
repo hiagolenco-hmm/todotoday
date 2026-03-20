@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarefas - Outro Nível</title>
     
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAXklEQVRYw+2W0QqAIAxF7f9/uS99K8IsS8Te9pBy7uYclSmlFD9iYpLeXpL09pKkt5ckvS9NInmZpPdIOnp6L8mO8S7ZHeNdsjvGu2R3jHfJ7hjvkt0x3iW7Y7xL9m8S9fSSeAnp6f0S0tP7vUnvD8InS99vS67lAAAAAElFTkSuQmCC">
-    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAXklEQVRYw+2W0QqAIAxF7f9/uS99K8IsS8Te9pBy7uYclSmlFD9iYpLeXpL09pKkt5ckvS9NInmZpPdIOnp6L8mO8S7ZHeNdsjvGu2R3jHfJ7hjvkt0x3iW7Y7xL9m8S9fSSeAnp6f0S0tP7vUnvD8InS99vS67lAAAAAElFTkSuQmCC">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
 
     <style>
         :root {
@@ -343,7 +343,7 @@
         addTabBtn.onclick = createTab;
         tabsHeader.appendChild(addTabBtn);
 
-        // Lista de Tarefas (com appendChild para manter o evento de editar)
+        // Lista de Tarefas (com appendChild para manter o evento de editar vivo)
         const list = document.getElementById('taskList');
         list.innerHTML = '';
         const tasks = db[currentTab] || [];
