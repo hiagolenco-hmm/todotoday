@@ -11,6 +11,7 @@
             --text: #333;
             --success: #2ecc71;
             --danger: #e74c3c;
+            --edit-color: #3498db;
         }
 
         body {
@@ -33,7 +34,6 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.08);
         }
 
-        /* Abas Dinâmicas */
         .tabs-header {
             display: flex;
             align-items: center;
@@ -88,7 +88,6 @@
             transition: 0.2s;
         }
 
-        /* Input e Lista */
         .input-group {
             display: flex;
             gap: 10px;
@@ -124,10 +123,41 @@
 
         .task-item:hover { background: #fafafa; }
 
-        .task-item input { margin-right: 15px; transform: scale(1.3); cursor: pointer; }
+        .task-text {
+            flex: 1;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        /* Indicador de edição no hover */
+        .task-text:not(.completed):hover {
+            background: #f0f7ff;
+        }
+        .task-text:not(.completed):hover::after {
+            content: " ✎";
+            color: var(--edit-color);
+            font-size: 0.9em;
+        }
+
+        .edit-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--edit-color);
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .task-item input[type="checkbox"] { 
+            margin-right: 15px; 
+            transform: scale(1.3); 
+            cursor: pointer; 
+        }
+        
         .completed { text-decoration: line-through; color: #aaa; }
 
-        /* Botão de Excluir Task */
         .delete-task {
             position: absolute;
             right: 10px;
@@ -139,15 +169,9 @@
             transition: 0.2s;
         }
 
-        .task-item:hover .delete-task {
-            opacity: 1;
-        }
+        .task-item:hover .delete-task { opacity: 1; }
+        .delete-task:hover { color: var(--danger); }
 
-        .delete-task:hover {
-            color: var(--danger);
-        }
-
-        /* Barra de Progresso Fixa */
         .progress-container {
             position: fixed;
             bottom: 0;
@@ -258,6 +282,36 @@
         save();
     }
 
+    // NOVA FUNÇÃO: Transforma o texto em input para editar
+    function editTask(index, spanElement) {
+        if (db[currentTab][index].done) return; // Não edita tarefa concluída
+
+        const currentText = db[currentTab][index].text;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'edit-input';
+        input.value = currentText;
+
+        const saveEdit = () => {
+            const newText = input.value.trim();
+            if (newText && newText !== currentText) {
+                db[currentTab][index].text = newText;
+                save();
+            } else {
+                render(); // Cancela ou mantém igual
+            }
+        };
+
+        input.onblur = saveEdit;
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') saveEdit();
+            if (e.key === 'Escape') render();
+        };
+
+        spanElement.replaceWith(input);
+        input.focus();
+    }
+
     function render() {
         const tabsHeader = document.getElementById('tabsHeader');
         tabsHeader.innerHTML = '';
@@ -287,11 +341,19 @@
             if (task.done) concluidas++;
             const li = document.createElement('li');
             li.className = 'task-item';
+            
+            // Cria o span da tarefa separadamente para vincular o clique de editar
+            const span = document.createElement('span');
+            span.className = `task-text ${task.done ? 'completed' : ''}`;
+            span.innerText = task.text;
+            span.onclick = () => editTask(index, span);
+
             li.innerHTML = `
                 <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${index})">
-                <span class="${task.done ? 'completed' : ''}">${task.text}</span>
-                <span class="delete-task" onclick="removeTask(${index})">✕</span>
             `;
+            li.appendChild(span);
+            li.innerHTML += `<span class="delete-task" onclick="removeTask(${index})">✕</span>`;
+            
             list.appendChild(li);
         });
 
